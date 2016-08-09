@@ -37,6 +37,7 @@ trades.set_index(full_dates)
 casha = np.zeros(shape=(len(full_dates), 1))
 cash = pd.DataFrame(casha)
 cash.set_index(full_dates)
+cash[dt_start] = sys.argv[0]
 
 # iterate through trades to create trade matrix
 for index, row in orders.iterrows():
@@ -47,5 +48,7 @@ for index, row in orders.iterrows():
     cash[row[0], 0] = cash[row[0], 0] - amount * data[row[0], row[1]]
 
 holdings = trades.cumsum(axis = 0)
+cash = cash.cumsum(axis = 0)
 
 total_stocks = holdings.dot(data)
+portfolio = total_stocks + cash
